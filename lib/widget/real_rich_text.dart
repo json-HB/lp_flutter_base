@@ -1,4 +1,4 @@
-import 'dart:ui' as ui show Image;
+import 'dart:ui' as ui show Codec, Image;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +63,17 @@ class RealRichText extends Text {
             maxLines: maxLines,
             locale: locale);
 
+  List<TextSpan> extractAllNestedChildren(TextSpan textSpan) {
+    if (textSpan.children == null || textSpan.children.length == 0) {
+      return [textSpan];
+    }
+    List<TextSpan> childrenSpan = [];
+    textSpan.children.forEach((child) {
+      childrenSpan.addAll(extractAllNestedChildren(child));
+    });
+    return childrenSpan;
+  }
+
   @override
   Widget build(BuildContext context) {
     final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
@@ -74,10 +85,13 @@ class RealRichText extends Text {
           .merge(const TextStyle(fontWeight: FontWeight.bold));
 
     TextSpan textSpan = TextSpan(
-      style: effectiveTextStyle,
-      text: "",
-      children: textSpanList,
-    );
+        style: effectiveTextStyle,
+        text: "",
+        children: extractAllNestedChildren(TextSpan(
+          style: effectiveTextStyle,
+          text: "",
+          children: textSpanList,
+        )));
 
     // pass the context to ImageSpan to create a ImageConfiguration
     textSpan.children.forEach((f) {
@@ -179,8 +193,8 @@ class ImageResolver {
 
     this._listener = listener;
     if (_imageStream.key != oldImageStream?.key) {
-      oldImageStream?.removeListener(_handleImageChanged);
-      _imageStream.addListener(_handleImageChanged);
+      oldImageStream?.removeListener(ImageStreamListener(_handleImageChanged));
+      _imageStream.addListener(ImageStreamListener(_handleImageChanged));
     }
   }
 
@@ -189,8 +203,14 @@ class ImageResolver {
     _listener?.call(imageInfo, synchronousCall);
   }
 
+  void addListening() {
+    if (this._listener != null) {
+      _imageStream?.addListener(ImageStreamListener(_handleImageChanged));
+    }
+  }
+
   void stopListening() {
-    _imageStream?.removeListener(_handleImageChanged);
+    _imageStream?.removeListener(ImageStreamListener(_handleImageChanged));
   }
 }
 
@@ -199,7 +219,7 @@ class ImageResolver {
 ///
 /// No more special purpose.
 class _RichTextWrapper extends RichText {
-  const _RichTextWrapper({
+  _RichTextWrapper({
     Key key,
     @required TextSpan text,
     TextAlign textAlign = TextAlign.start,
@@ -272,6 +292,16 @@ class _RealRichRenderParagraph extends RenderParagraph {
   }
 
   @override
+  void attach(covariant Object owner) {
+    super.attach(owner);
+    text.children.forEach((textSpan) {
+      if (textSpan is ImageSpan) {
+        textSpan.imageResolver.addListening();
+      }
+    });
+  }
+
+  @override
   void detach() {
     super.detach();
     text.children.forEach((textSpan) {
@@ -284,12 +314,16 @@ class _RealRichRenderParagraph extends RenderParagraph {
   @override
   void performLayout() {
     super.performLayout();
+
+    debugPrint("size = $size");
   }
 
   /// this method draws inline-image over blank text space.
   void paintImageSpan(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
     final Rect bounds = offset & size;
+
+    debugPrint("_RealRichRenderParagraph offset=$offset bounds=$bounds");
 
     canvas.save();
 
@@ -317,6 +351,8 @@ class _RealRichRenderParagraph extends RenderParagraph {
                 offsetForCaret.dx -
                 (textOffset == 0 ? 0 : textSpan.width / 2),
             offset.dy + offsetForCaret.dy);
+        debugPrint(
+            "_RealRichRenderParagraph ImageSpan, textOffset = $textOffset, offsetForCaret=$offsetForCaret, topLeftOffset=$topLeftOffset");
 
         // if image is not ready: wait for async ImageInfo
         if (textSpan.imageResolver.image == null) {
