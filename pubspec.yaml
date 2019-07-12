@@ -16,8 +16,8 @@ dependencies:
   cached_network_image: ^1.0.0
   hybrid_stack_manager:
     git:
-      url: https://github.com/webyom/hybrid_stack_manager.git
-      ref: v0.11.1
+      url: https://github.com/json-HB/hybrid_stack_manager.git
+      ref: v0.12.1
 
 dev_dependencies:
   flutter_test:
