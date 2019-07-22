@@ -44,10 +44,10 @@ class LpButton extends StatelessWidget {
               colors: <Color>[
                 disabled == true
                     ? COLOR_DISABLED
-                    : color ?? const Color(0xfff38b34),
+                    : color ?? const Color(0xffff923a),
                 disabled == true
                     ? COLOR_DISABLED
-                    : color ?? const Color(0xffff581d)
+                    : color ?? const Color(0xffff923a)
               ],
             ),
         super(key: key);
