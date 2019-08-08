@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hybrid_stack_manager/router.dart';
 import 'lp_loading.dart';
 import 'lp_dialog.dart';
+import 'dart:io';
 
 mixin LpStateMixin<T extends StatefulWidget> on State<T> {
   var _loading = false;
@@ -46,10 +47,17 @@ mixin LpStateMixin<T extends StatefulWidget> on State<T> {
   }
 
   Widget buildStack(List<Widget> children, {Key key}) {
-    return Stack(
-      key: key,
-      children: children.where((item) => item != null).toList(),
-      fit: StackFit.expand,
+    return GestureDetector(
+      onTap: () {
+        if (Platform.isIOS) {
+          FocusScope.of(context).requestFocus(FocusNode());
+        }
+      },
+      child: Stack(
+        key: key,
+        children: children.where((item) => item != null).toList(),
+        fit: StackFit.expand,
+      ),
     );
   }
 }
