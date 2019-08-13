@@ -1,7 +1,7 @@
 {
-  "label": {
-  },
+  "label": {},
   "msg": {
-    "svrErr": "系统繁忙"
+    "svrErr": "系统繁忙",
+    "netErr": "网络异常"
   }
 }

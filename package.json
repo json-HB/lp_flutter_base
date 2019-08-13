@@ -9,7 +9,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "app-node-tool": "git+https://github.com/webyom/app-node-tool.git#v0.9.0",
+    "app-node-tool": "git+https://github.com/json-HB/app-node-tool.git#v0.10.2",
     "gulp": "^3.9.0",
     "require-all": "^2.0.0"
   }

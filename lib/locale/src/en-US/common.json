@@ -1,7 +1,7 @@
 {
-  "label": {
-  },
+  "label": {},
   "msg": {
-    "svrErr": "Server busy"
+    "svrErr": "Server busy",
+    "netErr": "Net error"
   }
 }
