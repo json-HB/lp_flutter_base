@@ -17,7 +17,7 @@ dependencies:
   hybrid_stack_manager:
     git:
       url: https://github.com/json-HB/hybrid_stack_manager.git
-      ref: v0.12.2
+      ref: v0.12.3
 
 dev_dependencies:
   flutter_test:
