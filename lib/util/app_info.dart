@@ -14,6 +14,7 @@ abstract class AppInfo {
   static String apiBaseUrl;
   static String h5BaseUrl;
   static String staticBaseUrl;
+  static String userIdentity = '';
 
   static bool get isLoggedIn {
     return token != null && token.isNotEmpty;
@@ -30,6 +31,8 @@ abstract class AppInfo {
     version = appInfo['version'] ?? version;
     deviceId = appInfo['deviceId'] ?? deviceId;
     h5BaseUrl = appInfo['h5BaseUrl'] ?? h5BaseUrl;
+    userIdentity = appInfo['userIdentity'] ?? userIdentity;
+
     if (isDebug) {
       staticBaseUrl = 'https://statics-test.seanla.top';
     } else {
