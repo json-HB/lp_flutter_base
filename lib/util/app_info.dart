@@ -31,7 +31,7 @@ abstract class AppInfo {
     version = appInfo['version'] ?? version;
     deviceId = appInfo['deviceId'] ?? deviceId;
     h5BaseUrl = appInfo['h5BaseUrl'] ?? h5BaseUrl;
-    userIdentity = appInfo['userIdentity'] ?? userIdentity;
+    userIdentity = appInfo['userIdentity'] ?? '';
 
     if (isDebug) {
       staticBaseUrl = 'https://statics-test.seanla.top';
