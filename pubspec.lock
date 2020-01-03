@@ -232,8 +232,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v0.12.4"
-      resolved-ref: "1b6e635f0a9c6ca7cc10d154a87d632287963e32"
+      ref: "v0.12.5"
+      resolved-ref: "39e7450d0671d8517b37a63791d34bbd74214c37"
       url: "https://github.com/json-HB/hybrid_stack_manager.git"
     source: git
     version: "0.11.1"
